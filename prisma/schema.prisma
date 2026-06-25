@@ -1,0 +1,104 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../generated/prisma"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Starter models — replace with your own
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  domains   Domain[]
+  createdAt DateTime @default(now())
+}
+
+model Domain {
+  id                    String                 @id @default(cuid())
+  url                   String                 // e.g., "acme.com"
+  organizationId        String
+  organization          Organization           @relation(fields: [organizationId], references: [id])
+  scans                 Scan[]
+  recommendationActions RecommendationAction[]
+  competitors           Competitor[]
+  createdAt             DateTime               @default(now())
+}
+
+model Scan {
+  id                     String        @id @default(cuid())
+  domainId               String
+  domain                 Domain        @relation(fields: [domainId], references: [id])
+  status                 String        @default("PENDING") // PENDING, RUNNING, COMPLETED, FAILED
+  visibilityScore        Float?        // 0-100 aggregate score
+  presenceScore          Float?        // 0-100 aggregate score
+  recommendationStrength Float?        // Aggregate score
+  trendScore             Float?        // Based on historical entries
+  promptResponses        PromptResponse[]
+  report                 ScanReport?
+  createdAt              DateTime      @default(now())
+  completedAt            DateTime?
+
+  @@index([domainId])
+  @@index([status])
+}
+
+model PromptResponse {
+  id                     String  @id @default(cuid())
+  scanId                 String
+  scan                   Scan    @relation(fields: [scanId], references: [id], onDelete: Cascade)
+  promptId               String  // e.g. "A", "B", "C", "D"
+
+  openai_raw_response    String? // Full LLM output
+  gemini_raw_response    String? // Full LLM output
+
+  openai_normalized_json Json?   // Strict normalized JSON output
+  gemini_normalized_json Json?   // Strict normalized JSON output
+
+  openai_processing_time Int?    // Processing time in ms
+  gemini_processing_time Int?    // Processing time in ms
+
+  openai_status          String? // SUCCESS, ERROR, etc.
+  gemini_status          String? // SUCCESS, ERROR, etc.
+
+  openai_error_logs      String? // Detailed error logs
+  gemini_error_logs      String? // Detailed error logs
+}
+
+model ScanReport {
+  id                     String  @id @default(cuid())
+  scanId                 String  @unique
+  scan                   Scan    @relation(fields: [scanId], references: [id], onDelete: Cascade)
+
+  openaiFindings         Json
+  geminiFindings         Json
+
+  brandMentions          Json
+  competitorMentions     Json
+
+  visibilityScoreBreakdown Json
+  sovBreakdown           Json
+  recommendationBreakdown Json
+  confidenceScores       Json
+}
+
+model RecommendationAction {
+  id          String   @id @default(cuid())
+  domainId    String
+  domain      Domain   @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  title       String   // e.g., "Add Organization Schema"
+  description String
+  impact      String   // HIGH, MEDIUM, LOW
+  platform    String   // "Claude", etc.
+  isCompleted Boolean  @default(false)
+}
+
+model Competitor {
+  id          String   @id @default(cuid())
+  domainId    String
+  domain      Domain   @relation(fields: [domainId], references: [id], onDelete: Cascade)
+  url         String   // The competitor's URL/brand
+  createdAt   DateTime @default(now())
+}
