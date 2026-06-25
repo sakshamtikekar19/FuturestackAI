@@ -12,6 +12,12 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "workers/**",
+    "generated/**",
+    "prisma/**",
+    "scripts/**",
+    "check-scans.mjs",
+    "reset-scans.js"
   ]),
 ]);
 

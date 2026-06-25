@@ -13,12 +13,13 @@ const PLATFORMS = [
 ]
 
 function ConnectionLine({ start, end, color }: { start: THREE.Vector3, end: THREE.Vector3, color: string }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lineRef = useRef<any>(null)
   
   const points = useMemo(() => {
     const midPoint = start.clone().lerp(end, 0.5)
-    midPoint.y += Math.random() * 2
-    midPoint.z += Math.random() * 2
+    midPoint.y += (Math.abs(start.x + end.x) % 2)
+    midPoint.z += (Math.abs(start.y + end.y) % 2)
     const curve = new THREE.QuadraticBezierCurve3(start, midPoint, end)
     return curve.getPoints(30)
   }, [start, end])
@@ -27,6 +28,7 @@ function ConnectionLine({ start, end, color }: { start: THREE.Vector3, end: THRE
     if (lineRef.current) {
       // Create a pulsing effect running along the line
       const time = state.clock.getElapsedTime()
+      // @ts-expect-error - Drei line material doesn't expose opacity strongly
       lineRef.current.material.opacity = 0.2 + Math.sin(time * 3 + end.x) * 0.15
     }
   })

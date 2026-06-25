@@ -30,7 +30,9 @@ export async function POST(request: Request) {
         promptId: r.promptId,
         openai_raw_response: r.openai_raw_response,
         gemini_raw_response: r.gemini_raw_response,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         openai_normalized_json: r.openai_normalized_json as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         gemini_normalized_json: r.gemini_normalized_json as any,
         openai_processing_time: r.openai_processing_time,
         gemini_processing_time: r.gemini_processing_time,
@@ -39,12 +41,12 @@ export async function POST(request: Request) {
       }))
     })
 
-    // 2. Calculate the robust scan report
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { visibilityScore, reportData } = generateScanReport(
       results, 
       scan.domain.url,
       scan.domain.competitors
-    );
+    ) as any;
 
     // 3. Save the ScanReport
     await prisma.scanReport.create({

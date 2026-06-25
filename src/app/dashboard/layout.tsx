@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
+
 import { UserButton } from "@clerk/nextjs"
 import { auth } from "@clerk/nextjs/server"
 import prisma from "@/lib/prisma"
@@ -34,7 +34,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
         <SidebarNav pendingActionsCount={pendingActionsCount} />
         
         <div className="p-4 border-t border-border flex items-center gap-3">
-          <UserButton afterSignOutUrl="/" />
+          <UserButton />
           <div className="flex flex-col">
             <span className="text-sm font-medium text-foreground">My Account</span>
           </div>
@@ -77,7 +77,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
             </div>
 
             <div className="md:hidden flex items-center">
-               <UserButton afterSignOutUrl="/" />
+               <UserButton />
             </div>
           </div>
         </header>

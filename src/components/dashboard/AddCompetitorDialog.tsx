@@ -44,7 +44,7 @@ export function AddCompetitorDialog() {
             </button>
             
             <h2 className="text-xl font-bold mb-1">Add Competitor</h2>
-            <p className="text-sm text-muted-foreground mb-6">Enter a competitor's domain to track their AI visibility.</p>
+            <p className="text-sm text-muted-foreground mb-6">Enter a competitor&apos;s domain to track their AI visibility.</p>
             
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">

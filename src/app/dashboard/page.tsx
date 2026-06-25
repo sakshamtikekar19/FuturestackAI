@@ -6,7 +6,7 @@ import { redirect } from "next/navigation"
 
 import { VisibilityChart } from "@/components/dashboard/VisibilityChart"
 
-import Link from "next/link"
+
 import { ScanButton } from "@/components/dashboard/ScanButton"
 import { AutoRefresh } from "@/components/AutoRefresh"
 import { scanQueue } from "@/lib/queue"
@@ -108,21 +108,20 @@ export default async function DashboardOverview(props: { searchParams?: Promise<
 
   // Calculate high-level stats
   const visibilityScore = latestScanWithResults?.visibilityScore || 0
-  const actionsCompleted = await prisma.recommendationAction.count({
-    where: { domain: { organizationId }, isCompleted: true }
-  })
+
   
   const totalQueries = latestScanWithResults?.promptResponses?.length || 0
 
   const brandDomain = mostRecentAnyScan?.domain?.url || ""
   const prefix = brandDomain.split('.')[0].toLowerCase()
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const totalRecommendations = latestScanWithResults?.promptResponses?.reduce((sum: number, r: any) => {
     let count = 0;
     if (r.openai_normalized_json && r.openai_normalized_json.brands_mentioned) {
-      count += r.openai_normalized_json.brands_mentioned.filter((b: string) => b.toLowerCase().includes(prefix)).length;
+      count += r.openai_normalized_json.brands_mentioned.filter((b: string) => typeof b === 'string' && b.toLowerCase().includes(prefix)).length;
     }
     if (r.gemini_normalized_json && r.gemini_normalized_json.brands_mentioned) {
-      count += r.gemini_normalized_json.brands_mentioned.filter((b: string) => b.toLowerCase().includes(prefix)).length;
+      count += r.gemini_normalized_json.brands_mentioned.filter((b: string) => typeof b === 'string' && b.toLowerCase().includes(prefix)).length;
     }
     return sum + count;
   }, 0) || 0

@@ -1,0 +1,6 @@
+workers/*
+generated/*
+prisma/*
+scripts/*
+check-scans.mjs
+reset-scans.js

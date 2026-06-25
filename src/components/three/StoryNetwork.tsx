@@ -25,12 +25,14 @@ const DATA_SOURCES = [
 ]
 
 function DynamicConnection({ start, end, color }: { start: THREE.Vector3, end: THREE.Vector3, color: string }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lineRef = useRef<any>(null)
   
   const curve = useMemo(() => {
     const midPoint = start.clone().lerp(end, 0.5)
-    midPoint.y += Math.random() * 2
-    midPoint.z += Math.random() * 2
+    // Deterministic offset based on coordinates to appease react-hooks/purity
+    midPoint.y += (Math.abs(start.x + end.x) % 2)
+    midPoint.z += (Math.abs(start.y + end.y) % 2)
     return new THREE.QuadraticBezierCurve3(start, midPoint, end)
   }, [start, end])
 
@@ -45,6 +47,7 @@ function DynamicConnection({ start, end, color }: { start: THREE.Vector3, end: T
       const time = state.clock.getElapsedTime()
       const pulse = Math.sin(time * 5 + end.x) * 0.2
       
+      // @ts-expect-error - Drei line material doesn't expose opacity strongly
       lineRef.current.material.opacity = THREE.MathUtils.lerp(
         lineRef.current.material.opacity, 
         targetOpacity > 0 ? targetOpacity * 0.5 + pulse : 0, 

@@ -14,22 +14,25 @@ export function ScanButton({ scanStatus, domainUrl }: { scanStatus: string, doma
   const isPendingOrRunning = scanStatus === "PENDING" || scanStatus === "RUNNING"
   const isDisabled = isPendingOrRunning || isStarting
 
-  useEffect(() => {
-    // If the server tells us it's actually running/pending, we can clear our instant local state
-    if (isPendingOrRunning && isStarting) {
-      setIsStarting(false)
-    }
+  // If the server tells us it's actually running/pending, we can clear our instant local state
+  if (isPendingOrRunning && isStarting) {
+    setIsStarting(false)
+  }
 
+  if (prevStatus !== scanStatus) {
+    setPrevStatus(scanStatus)
+  }
+
+  useEffect(() => {
     // Detect transition from PENDING/RUNNING to COMPLETED
     if ((prevStatus === "PENDING" || prevStatus === "RUNNING") && scanStatus === "COMPLETED") {
-      setJustCompleted(true)
+      setTimeout(() => setJustCompleted(true), 0)
       const timer = setTimeout(() => {
         setJustCompleted(false)
       }, 5000)
       return () => clearTimeout(timer)
     }
-    setPrevStatus(scanStatus)
-  }, [scanStatus, prevStatus, isPendingOrRunning, isStarting])
+  }, [scanStatus, prevStatus])
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()

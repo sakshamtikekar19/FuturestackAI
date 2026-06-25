@@ -10,15 +10,22 @@ export function ParticleField({ count = 500 }: { count?: number }) {
   
   const particles = useMemo(() => {
     const temp = []
+    // Deterministic random to avoid react-hooks/purity errors
+    const random = (seed: number) => {
+      const x = Math.sin(seed++) * 10000;
+      return x - Math.floor(x);
+    }
+    
+    let seed = 1;
     for (let i = 0; i < count; i++) {
-      const x = (Math.random() - 0.5) * 40
-      const y = (Math.random() - 0.5) * 40
-      const z = (Math.random() - 0.5) * 40
-      const factor = Math.random() * 0.5 + 0.1
-      const speed = Math.random() * 0.01 + 0.005
-      const xOffset = Math.random() * Math.PI * 2
-      const yOffset = Math.random() * Math.PI * 2
-      const zOffset = Math.random() * Math.PI * 2
+      const x = (random(seed++) - 0.5) * 40
+      const y = (random(seed++) - 0.5) * 40
+      const z = (random(seed++) - 0.5) * 40
+      const factor = random(seed++) * 0.5 + 0.1
+      const speed = random(seed++) * 0.01 + 0.005
+      const xOffset = random(seed++) * Math.PI * 2
+      const yOffset = random(seed++) * Math.PI * 2
+      const zOffset = random(seed++) * Math.PI * 2
       temp.push({ x, y, z, factor, speed, xOffset, yOffset, zOffset })
     }
     return temp

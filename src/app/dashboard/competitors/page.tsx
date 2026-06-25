@@ -39,6 +39,7 @@ export default async function CompetitorsPage() {
 
   const competitors = domain?.competitors || []
   
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const reportData = latestScan?.report as any;
   const brandSOV = reportData?.sovBreakdown?.brandSOV || 0;
   const totalMarketMentions = reportData?.sovBreakdown?.totalMarketMentions || 0;
@@ -109,7 +110,7 @@ export default async function CompetitorsPage() {
               ) : (
                 <div className="flex flex-col items-center justify-center py-8 text-center border-2 border-dashed border-border rounded-lg bg-secondary/20">
                   <p className="text-muted-foreground text-sm max-w-sm mb-4">
-                    You aren't tracking any competitors yet. Add competitors to see how their AI Visibility compares to yours.
+                    You aren&apos;t tracking any competitors yet. Add competitors to see how their AI Visibility compares to yours.
                   </p>
                 </div>
               )}

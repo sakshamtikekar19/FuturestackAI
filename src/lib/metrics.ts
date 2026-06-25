@@ -25,14 +25,14 @@ export interface PromptResponsePayload {
 }
 
 export interface ScanReportData {
-  openaiFindings: any;
-  geminiFindings: any;
-  brandMentions: any;
-  competitorMentions: any;
-  visibilityScoreBreakdown: any;
-  sovBreakdown: any;
-  recommendationBreakdown: any;
-  confidenceScores: any;
+  openaiFindings: Record<string, unknown>;
+  geminiFindings: Record<string, unknown>;
+  brandMentions: Record<string, unknown>;
+  competitorMentions: Record<string, unknown>;
+  visibilityScoreBreakdown: Record<string, unknown>;
+  sovBreakdown: Record<string, unknown>;
+  recommendationBreakdown: Record<string, unknown>;
+  confidenceScores: Record<string, unknown>;
 }
 
 // Phase 4: Data Validation (Canonical Brand Matching)
@@ -64,11 +64,11 @@ export function generateScanReport(
   competitors: { url: string }[] = []
 ): { visibilityScore: number, reportData: ScanReportData } {
 
-  const brandMentions = { total: 0, sources: [] as string[] };
+  const _brandMentions = { total: 0, sources: [] as string[] };
   const competitorMentions: Record<string, number> = {};
   competitors.forEach(c => competitorMentions[c.url] = 0);
 
-  const confidenceScores = { openai: [] as number[], gemini: [] as number[] };
+  const _confidenceScores = { openai: [] as number[], gemini: [] as number[] };
 
 // Helper to process points for a specific model's responses
   const processModelResponses = (modelKey: 'openai' | 'gemini') => {
@@ -139,7 +139,7 @@ export function generateScanReport(
     if (totalMarketMentions < totalTrackedMentions) totalMarketMentions = totalTrackedMentions;
     if (totalMarketMentions === 0 && brandMentionsCount > 0) totalMarketMentions = brandMentionsCount;
     
-    let brandSOV = totalMarketMentions > 0 ? brandMentionsCount / totalMarketMentions : 0;
+    const brandSOV = totalMarketMentions > 0 ? brandMentionsCount / totalMarketMentions : 0;
 
     const mentionPct = maxMentionPoints > 0 ? Math.min(1, mentionPresencePoints / maxMentionPoints) : 0;
     const rankingPct = maxRankingPoints > 0 ? Math.min(1, rankingPositionPoints / maxRankingPoints) : 0;

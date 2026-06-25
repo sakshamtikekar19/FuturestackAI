@@ -55,15 +55,17 @@ export default async function VisibilityPage() {
 
       <div className="grid grid-cols-1 gap-12">
         {latestScan.promptResponses.map((pr) => {
-          const oNorm = pr.openai_normalized_json as any || { brands_mentioned: [], ranked_list: [], confidence: 0 };
-          const oHasMention = oNorm.brands_mentioned.some((b: string) => isBrandMatch(b, domainUrl)) || oNorm.ranked_list.some((b: string) => isBrandMatch(b, domainUrl));
-          const oRankIndex = oNorm.ranked_list.findIndex((b: string) => isBrandMatch(b, domainUrl));
-          const oRank = oRankIndex !== -1 ? oRankIndex + 1 : "N/A";
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const oNorm = (pr.openai_normalized_json as any) || { brands_mentioned: [], ranked_list: [], confidence: 0 };
+          const oHasMention = oNorm.brands_mentioned?.some((b: string) => typeof b === 'string' && isBrandMatch(b, domainUrl)) || oNorm.ranked_list?.some((b: string) => typeof b === 'string' && isBrandMatch(b, domainUrl));
+          const oRankIndex = oNorm.ranked_list?.findIndex((b: string) => typeof b === 'string' && isBrandMatch(b, domainUrl));
+          const oRank = oRankIndex !== -1 && oRankIndex !== undefined ? oRankIndex + 1 : "N/A";
 
-          const gNorm = pr.gemini_normalized_json as any || { brands_mentioned: [], ranked_list: [], confidence: 0 };
-          const gHasMention = gNorm.brands_mentioned.some((b: string) => isBrandMatch(b, domainUrl)) || gNorm.ranked_list.some((b: string) => isBrandMatch(b, domainUrl));
-          const gRankIndex = gNorm.ranked_list.findIndex((b: string) => isBrandMatch(b, domainUrl));
-          const gRank = gRankIndex !== -1 ? gRankIndex + 1 : "N/A";
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const gNorm = (pr.gemini_normalized_json as any) || { brands_mentioned: [], ranked_list: [], confidence: 0 };
+          const gHasMention = gNorm.brands_mentioned?.some((b: string) => typeof b === 'string' && isBrandMatch(b, domainUrl)) || gNorm.ranked_list?.some((b: string) => typeof b === 'string' && isBrandMatch(b, domainUrl));
+          const gRankIndex = gNorm.ranked_list?.findIndex((b: string) => typeof b === 'string' && isBrandMatch(b, domainUrl));
+          const gRank = gRankIndex !== -1 && gRankIndex !== undefined ? gRankIndex + 1 : "N/A";
 
           return (
             <div key={pr.id} className="space-y-4 border-b border-border pb-8 last:border-0">

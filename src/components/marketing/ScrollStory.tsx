@@ -5,32 +5,15 @@ import Link from "next/link";
 import { ArrowRight, BarChart, Globe, Zap, Check } from "lucide-react";
 import { LiveScanner } from "./LiveScanner";
 import { SignUpButton, SignInButton } from "@clerk/nextjs";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useStoryStore } from "@/store/useStoryStore";
 
 export function ScrollStory() {
   const { scrollYProgress } = useScroll();
   const setScrollProgress = useStoryStore((state) => state.setScrollProgress);
-  const [domain, setDomain] = useState("");
-  const router = useRouter();
-
-  const handleStartAudit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (domain.trim()) {
-      router.push(`/dashboard?domain=${encodeURIComponent(domain.trim())}`);
-    } else {
-      router.push("/dashboard");
-    }
-  };
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     setScrollProgress(latest);
   });
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
-  };
 
   return (
     <div className="relative z-10 pointer-events-auto">
@@ -71,7 +54,7 @@ export function ScrollStory() {
             className="text-center mb-24"
           >
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">The New SEO is AIO</h2>
-            <p className="text-white/60 text-lg max-w-2xl mx-auto">Traditional SEO is losing ground. If your brand isn't recommended by AI, you are practically invisible to the next generation of consumers.</p>
+            <p className="text-white/60 text-lg max-w-2xl mx-auto">Traditional SEO is losing ground. If your brand isn&apos;t recommended by AI, you are practically invisible to the next generation of consumers.</p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
