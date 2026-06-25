@@ -28,7 +28,6 @@ function ConnectionLine({ start, end, color }: { start: THREE.Vector3, end: THRE
     if (lineRef.current) {
       // Create a pulsing effect running along the line
       const time = state.clock.getElapsedTime()
-      // @ts-expect-error - Drei line material doesn't expose opacity strongly
       lineRef.current.material.opacity = 0.2 + Math.sin(time * 3 + end.x) * 0.15
     }
   })

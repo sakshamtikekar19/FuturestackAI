@@ -47,7 +47,6 @@ function DynamicConnection({ start, end, color }: { start: THREE.Vector3, end: T
       const time = state.clock.getElapsedTime()
       const pulse = Math.sin(time * 5 + end.x) * 0.2
       
-      // @ts-expect-error - Drei line material doesn't expose opacity strongly
       lineRef.current.material.opacity = THREE.MathUtils.lerp(
         lineRef.current.material.opacity, 
         targetOpacity > 0 ? targetOpacity * 0.5 + pulse : 0, 
