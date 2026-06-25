@@ -20,7 +20,7 @@ export async function GET(request: Request) {
       },
       orderBy: { completedAt: "desc" },
       include: {
-        results: true,
+        promptResponses: true,
         domain: true
       }
     })
