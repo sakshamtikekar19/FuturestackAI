@@ -25,14 +25,15 @@ export interface PromptResponsePayload {
 }
 
 export interface ScanReportData {
-  openaiFindings: Record<string, unknown>;
-  geminiFindings: Record<string, unknown>;
-  brandMentions: Record<string, unknown>;
-  competitorMentions: Record<string, unknown>;
-  visibilityScoreBreakdown: Record<string, unknown>;
-  sovBreakdown: Record<string, unknown>;
-  recommendationBreakdown: Record<string, unknown>;
-  confidenceScores: Record<string, unknown>;
+  openaiFindings: unknown;
+  geminiFindings: unknown;
+  brandMentions: unknown;
+  competitorMentions: unknown;
+  visibilityScoreBreakdown: unknown;
+  sovBreakdown: unknown;
+  recommendationBreakdown: unknown;
+  confidenceScores: unknown;
+  providerScores?: unknown;
 }
 
 // Phase 4: Data Validation (Canonical Brand Matching)
